@@ -41,24 +41,21 @@ export default function Mint(props) {
     
   const whiteListCheck = async (init) =>{
     if(process.env.REACT_APP_WHITELIST == "true"){
-      let ret = await axios.get(WLData.whiteList)
-      .then(async (Response) => {
-        whiteList = Response.data.items;
+        whiteList = WLData.whiteList;
         let flag = 0;
         for(let i = 0; i<whiteList.length;i++){
-          if(account.toUpperCase() == whiteList[i].address.toUpperCase()){
+          if(account.toUpperCase() == whiteList[i].toUpperCase()){
             flag = 1;
             WLFlag = 1;
-            console.log(whiteList[i].address.toUpperCase());
+            console.log(whiteList[i].toUpperCase());
           }
         }
         if(flag == 0){
           WLFlag = 0;
         }
-      })
     }
     let liveDate = process.env.REACT_APP_START_BLOCK;       
-    const timeStmp = + new Date();   
+    const timeStmp = web3.eth.getBlockNumber();   
     if(timeStmp > liveDate){
       setMintLive(false);
     }
